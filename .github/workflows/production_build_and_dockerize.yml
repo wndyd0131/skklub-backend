@@ -56,7 +56,6 @@ jobs:
           else
             echo "${{ secrets.PROPERTIES }}" > ./application.yml
           fi
-          
 
       - name: Build with Gradle
         run: ./gradlew build -x test
@@ -75,6 +74,7 @@ jobs:
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker buildx create --name multi-arch-builder --driver docker-container --use 
+
           docker buildx build --platform=linux/arm64/v8,linux/amd64/v3 -f Dockerfile -t ${{ secrets.DOCKER_TEST_REPO }}:${{ steps.extract_branch.outputs.BRANCH_NAME }}-latest --push .
       
       - name: Jenkins post

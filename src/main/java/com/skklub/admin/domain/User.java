@@ -34,4 +34,7 @@ public class User extends BaseTimeEntity {
         this.contact = updateInfo.contact;
     }
 
+    public void encodePw(String encodedPw) {
+        this.password = encodedPw;
+    }
 }

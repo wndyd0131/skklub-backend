@@ -51,7 +51,12 @@ jobs:
           mkdir -p ./src/main/resources
           cd ./src/main/resources
           touch ./application.yml
-          echo "${{ secrets.PROPERTIES }}" > ./application.yml
+          if [ "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" == "master" ]; then
+            echo "${{ secrets.PROPERTIES_PROD }}" > ./application.yml
+          else
+            echo "${{ secrets.PROPERTIES }}" > ./application.yml
+          fi
+          
 
       - name: Build with Gradle
         run: ./gradlew build -x test
@@ -74,4 +79,8 @@ jobs:
       
       - name: Jenkins post
         run: |
-          curl -X POST https://${{ secrets.JENKINS_USERNAME }}:${{ secrets.JENKINS_TOKEN }}@deploy.skku.dev/job/%28DEV%29skklub-backend/build
+          if [ "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" == "master" ]; then
+            curl -X POST https://${{ secrets.JENKINS_USERNAME }}:${{ secrets.JENKINS_TOKEN }}@deploy.skku.dev/job/%28REAL%29skklub-backend/build
+          else
+            curl -X POST https://${{ secrets.JENKINS_USERNAME }}:${{ secrets.JENKINS_TOKEN }}@deploy.skku.dev/job/%28DEV%29skklub-backend/build
+          fi

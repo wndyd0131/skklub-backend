@@ -27,6 +27,15 @@ public class UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RedisUtil redisUtil;
 
+
+    public void createUser(User user) {
+        validateUsernameDuplication(user.getUsername());
+        String password = user.getPassword();
+        String encodedPw = bCryptPasswordEncoder.encode(password);
+        user.encodePw(encodedPw);
+        userRepository.save(user);
+    }
+
     //User Login
     public UserLoginDTO loginUser(String username, String password){
         //기본 username, password 인증

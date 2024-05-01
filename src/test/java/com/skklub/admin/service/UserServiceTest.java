@@ -3,6 +3,7 @@ package com.skklub.admin.service;
 import com.skklub.admin.TestUserJoin;
 import com.skklub.admin.domain.User;
 import com.skklub.admin.domain.enums.Role;
+import com.skklub.admin.exception.AuthException;
 import com.skklub.admin.repository.UserRepository;
 import com.skklub.admin.security.auth.PrincipalDetailsService;
 import com.skklub.admin.security.jwt.TokenProvider;
@@ -10,11 +11,16 @@ import com.skklub.admin.security.redis.RedisUtil;
 import com.skklub.admin.service.dto.UserLoginDTO;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
@@ -27,6 +33,49 @@ public class UserServiceTest {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final RedisUtil redisUtil;
+
+    /**
+     * input :
+     * expect result :
+     */
+    @Test
+    @DisplayName("유저 생성 - 비밀번호 암호화 테스트")
+    public void createUser_GivenFullData_SavedAsEncodedPw() throws Exception{
+        //given
+        String rawPassword = "1234";
+        User user = new User("testUser", rawPassword, Role.ROLE_USER, "testUser", "testContact");
+
+        //mocking
+
+        //when
+        userService.createUser(user);
+
+        //then
+        assertThat("비밀번호 암호화 및 암호화 일치 여부 확인",
+                bCryptPasswordEncoder.matches(rawPassword, user.getPassword()), Matchers.is(true));
+
+    }
+
+    /**
+     * input :
+     * expect result :
+     */
+    @Test
+    @DisplayName("유저 생성 - 중복 이름 실패")
+    public void createUser_AlreadySavedName_AuthException() throws Exception{
+        //given
+        User preSavedUser = new User("testUser", "1234", Role.ROLE_USER, "testUser", "testContact");
+        User postSavedUser = new User("testUser", "1234", Role.ROLE_USER, "testUser2", "testContact2");
+        userRepository.save(preSavedUser);
+
+        //mocking
+
+        //when
+        assertThrows(AuthException.class, () -> userService.createUser(postSavedUser));
+
+        //then
+
+    }
 
     @Autowired
     public UserServiceTest(UserService userService, TestUserJoin testUserJoin, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, PrincipalDetailsService principalDetailsService, RedisUtil redisUtil){
