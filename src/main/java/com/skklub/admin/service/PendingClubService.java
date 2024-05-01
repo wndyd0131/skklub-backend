@@ -36,8 +36,7 @@ public class PendingClubService {
                 .map(
                         pendingClub -> {
                             User user = pendingClub.toUser();
-                            userService.validateUsernameDuplication(user.getUsername());
-                            userRepository.save(user);
+                            userService.createUser(user);
                             Club club = pendingClub.toClubWithDefaultLogo(campus, clubType, belongs, user);
                             clubRepository.save(club);
                             pendingClubRepository.delete(pendingClub);
