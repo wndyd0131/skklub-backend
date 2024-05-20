@@ -111,7 +111,7 @@ public class SecurityConfig  {
                new AntPathRequestMatcher("/user/**","POST"), //update
                 new AntPathRequestMatcher("/user/logout","POST"),
                 //refresh
-                new AntPathRequestMatcher("/refresh","POST"),
+                new AntPathRequestMatcher("/refresh","GET"),
                 //notice
                 new AntPathRequestMatcher("/notice/**","POST"),
                 new AntPathRequestMatcher("/notice/**","PATCH"),
