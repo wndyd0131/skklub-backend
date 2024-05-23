@@ -37,7 +37,7 @@ public class SecurityConfig  {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://www.skklub.com/", "https://admin.skklub.com/", "https://skklub.com/"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://www.skklub.com/", "https://admin.skklub.com/", "https://admin.skklub.com", "https://skklub.com/"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setExposedHeaders(Arrays.asList("Authorization", "Refresh-Token"));
