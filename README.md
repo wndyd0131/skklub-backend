@@ -28,9 +28,11 @@ The project involved a comprehensive renewal of the SKKLUB platform, initiated d
         - Due to poor database structure with NoSQL, we decided to change the database structure with more structured way. We utilized SQL instead of NoSQL and modified column names and data types, added new columns and constraints, and grouped relevant data with new tables.
 
             - Previous club table
-                ![](./readme/prev_club_table.png)
+
+              ![](./readme/prev_club_table.png)
 
             - New club table
+              
                 ![](./readme/new_club_sql.png)
     
     <br>
