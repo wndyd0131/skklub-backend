@@ -157,6 +157,33 @@ create table request_club_required (
     request_club_optional_id bigint not null
 );
 
+create table club (
+                      club_id bigint primary key not null auto_increment,
+                      campus varchar(10) not null check(campus in ('명륜', '율전')),
+                      belongs varchar(30) not null,
+                      club_description text not null,
+                      activity_description text not null,
+                      brief_activity_description varchar(50) not null,
+                      club_type varchar(50) not null,
+                      establish_at int default null check(establish_at >= 1398 and establish_at <= 2999),
+                      head_line varchar(100) default null,
+                      mandatory_activate_period varchar(255),
+                      member_amount int,
+                      name varchar(100) not null,
+                      regular_meeting_time varchar(500),
+                      room_location varchar(255),
+                      web_link1 varchar(2000) default null,
+                      web_link2 varchar(2000) default null,
+                      logo_id bigint not null,
+                      user_id bigint not null,
+                      recruit_id bigint default null,
+                      created_at datetime(6) not null default now(6),
+                      last_modified_at datetime(6) not null default now(6),
+                      created_by varchar(255) not null,
+                      last_modified_by varchar(255) not null
+);
+
+
 create table request_user (
     request_user_id bigint primary key not null auto_increment,
 
